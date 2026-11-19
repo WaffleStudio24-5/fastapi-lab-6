@@ -1,18 +1,27 @@
+from contextlib import asynccontextmanager
 from typing import Annotated
 
 from fastapi import Depends, FastAPI
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.database import get_db
+from app.database import AsyncEngine, get_db
 from app.routers import post_router
 
-app = FastAPI(title="5주차 실습")
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    try:
+        yield
+    finally:
+        await AsyncEngine.dispose()
+
+
+app = FastAPI(title="6주차 실습", lifespan=lifespan)
 app.include_router(post_router, tags=["Posts"])
 
 
 @app.get("/health", tags=["연결 확인"])
-def health(db: Annotated[Session, Depends(get_db)]):
-    db.scalar(select(1))
+async def health(db: Annotated[AsyncSession, Depends(get_db)]):
+    await db.scalar(select(1))
     return {"status": "ok"}

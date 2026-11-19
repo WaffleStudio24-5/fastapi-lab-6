@@ -9,16 +9,16 @@ post_router = APIRouter()
 
 
 @post_router.get("/posts", response_model=list[PostResponse], tags=["게시글"])
-def get_posts(service: Annotated[PostService, Depends(PostService)]):
-    return service.get_post()
+async def get_posts(service: Annotated[PostService, Depends(PostService)]):
+    return await service.get_post()
 
 
 @post_router.get("/posts/{post_id}", response_model=PostResponse, tags=["게시글"])
-def get_post(
+async def get_post(
     post_id: Annotated[int, Path(gt=0)],
     service: Annotated[PostService, Depends(PostService)],
 ):
-    post = service.get_post(post_id)
+    post = await service.get_post(post_id)
     if post is None:
         raise HTTPException(status_code=404, detail="게시글을 찾을 수 없습니다.")
     return post
@@ -32,11 +32,11 @@ def get_post(
     description="글을 작성합니다. 사용자당 최대 3개까지 작성할 수 있습니다.",
     responses={409: {"description": "이미 게시글이 3개인 사용자의 추가 작성은 거절합니다."}},
 )
-def create_post(
+async def create_post(
     body: PostCreate, service: Annotated[PostService, Depends(PostService)]
 ):
     try:
-        return service.create_post(title=body.title, user_id=body.user_id)
+        return await service.create_post(title=body.title, user_id=body.user_id)
     except ValueError as exc:
         raise HTTPException(
             status_code=409,
@@ -45,12 +45,12 @@ def create_post(
 
 
 @post_router.patch("/posts/{post_id}", response_model=PostResponse, tags=["게시글"])
-def update_post(
+async def update_post(
     post_id: Annotated[int, Path(gt=0)],
     body: PostUpdate,
     service: Annotated[PostService, Depends(PostService)],
 ):
-    post = service.update_post(post_id, body.title)
+    post = await service.update_post(post_id, body.title)
     if post is None:
         raise HTTPException(status_code=404, detail="게시글을 찾을 수 없습니다.")
     return post
@@ -59,10 +59,10 @@ def update_post(
 @post_router.delete(
     "/posts/{post_id}", status_code=status.HTTP_204_NO_CONTENT, tags=["게시글"]
 )
-def delete_post(
+async def delete_post(
     post_id: Annotated[int, Path(gt=0)],
     service: Annotated[PostService, Depends(PostService)],
 ):
-    if not service.delete_post(post_id):
+    if not await service.delete_post(post_id):
         raise HTTPException(status_code=404, detail="게시글을 찾을 수 없습니다.")
     return Response(status_code=status.HTTP_204_NO_CONTENT)
