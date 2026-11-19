@@ -1,7 +1,7 @@
 [project]
 name = "fastapi-lab-6"
 version = "0.1.0"
-description = "Waffle Studio FastAPI 6주차: 블로킹 확인·기존 CRUD 비동기 전환"
+description = "Waffle Studio FastAPI 6주차: 전체 엔드포인트 비동기 전환·트랜잭션과 락"
 requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.115,<1",
@@ -16,6 +16,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "alembic>=1.13,<2",
     "pytest>=8,<9",
     "aiosqlite>=0.20,<1",
 ]
