@@ -1,7 +1,7 @@
 [project]
 name = "fastapi-lab-6"
 version = "0.1.0"
-description = "Waffle Studio FastAPI 6주차: 동시 요청·블로킹 확인·비동기 DB 조회"
+description = "Waffle Studio FastAPI 6주차: 블로킹 확인·기존 CRUD 비동기 전환"
 requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.115,<1",
@@ -9,7 +9,7 @@ dependencies = [
     "sqlalchemy[asyncio]>=2.0,<2.1",
     "pymysql[rsa]>=1.1,<2",
     "asyncmy>=0.2,<0.3",
-    "alembic>=1.16,<2",
+    "cryptography",
     "httpx>=0.28,<0.29",
     "pydantic-settings>=2,<3",
 ]
@@ -17,7 +17,6 @@ dependencies = [
 [dependency-groups]
 dev = [
     "pytest>=8,<9",
-    "httpx2>=2.16,<3",
     "aiosqlite>=0.20,<1",
 ]
 

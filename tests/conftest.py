@@ -1,8 +1,7 @@
 import os
 
-# 앱 import 전 테스트 프로세스의 접속 주소를 고정한다.
-# 쿼리는 아래 get_db override로 만든 임시 SQLite에만 실행된다.
-os.environ["DATABASE_URL"] = "mysql+pymysql://seminar:lab6-local-only@127.0.0.1:3308/seminar_lab6"
+# 앱을 import하기 전에 고정한다. 셸의 DATABASE_URL을 테스트에 사용하지 않는다.
+os.environ["DATABASE_URL"] = "sqlite+pysqlite:///:memory:"
 
 import pytest
 from fastapi.testclient import TestClient

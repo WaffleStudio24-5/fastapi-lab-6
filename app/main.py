@@ -1,22 +1,15 @@
-from contextlib import asynccontextmanager
 from typing import Annotated
 
 from fastapi import Depends, FastAPI
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.database import Engine, get_db
+from app.database import get_db
 from app.routers import post_router
 
+app = FastAPI(title="5주차 실습")
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    yield
-    Engine.dispose()
-
-
-app = FastAPI(title="6주차 실습 — 완성된 동기 CRUD", lifespan=lifespan)
-app.include_router(post_router)
+app.include_router(post_router, tags=["Posts"])
 
 
 @app.get("/health", tags=["연결 확인"])
